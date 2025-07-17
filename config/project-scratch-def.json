@@ -1,0 +1,51 @@
+{
+  "orgName": "Related List Inline Edit Dev Org",
+  "description": "Scratch org for developing and testing the Related List Inline Edit component",
+  "edition": "Developer",
+  "country": "US",
+  "language": "en_US",
+  "features": [
+    "EnableSetPasswordInApi",
+    "LightningExperienceEnabled",
+    "UnlimitedApexCodeSize",
+    "EnableDynamicStreaming"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": false
+    },
+    "securitySettings": {
+      "enableAdminLoginAsAnyUser": true,
+      "sessionSettings": {
+        "forceRelogin": false
+      }
+    },
+    "userManagementSettings": {
+      "enableNewProfileUI": true
+    },
+    "pathAssistantSettings": {
+      "pathAssistantEnabled": true
+    },
+    "omniChannelSettings": {
+      "enableOmniChannel": true
+    }
+  },
+  "objectSettings": {
+    "account": {
+      "sharingModel": "readWrite"
+    },
+    "contact": {
+      "sharingModel": "readWrite"
+    },
+    "opportunity": {
+      "sharingModel": "readWrite"
+    },
+    "case": {
+      "sharingModel": "readWrite"
+    }
+  },
+  "adminEmail": "admin@example.com"
+}

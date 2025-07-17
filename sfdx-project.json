@@ -1,0 +1,24 @@
+{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "RelatedListInlineEdit",
+      "versionName": "ver 1.0",
+      "versionNumber": "1.0.0.NEXT",
+      "definitionFile": "config/project-scratch-def.json",
+      "dependencies": [],
+      "ancestorId": "",
+      "ancestorVersion": ""
+    }
+  ],
+  "name": "salesforce-related-list-inline-edit",
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "60.0",
+  "packageAliases": {
+    "RelatedListInlineEdit": "0Ho000000000000000"
+  },
+  "plugins": {},
+  "targetDevHubUsername": ""
+}

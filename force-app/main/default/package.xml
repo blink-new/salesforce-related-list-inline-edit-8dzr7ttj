@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>RelatedListInlineEditController</members>
+        <members>RelatedListInlineEditControllerTest</members>
+        <members>RelatedListSecurityUtils</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>relatedListInlineEdit</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>Related_List_Inline_Edit_Admin</members>
+        <members>Related_List_Bulk_Operations</members>
+        <name>CustomPermission</name>
+    </types>
+    <version>60.0</version>
+</Package>

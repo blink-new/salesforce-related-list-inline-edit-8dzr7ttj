@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>60.0</apiVersion>
+    <isExposed>true</isExposed>
+    <description>A fully configurable inline edit component for Salesforce related lists with comprehensive editing features and seamless integration capabilities.</description>
+    
+    <targets>
+        <target>lightning__RecordPage</target>
+        <target>lightning__AppPage</target>
+        <target>lightning__HomePage</target>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordPage">
+            <objects>
+                <object>Account</object>
+                <object>Contact</object>
+                <object>Lead</object>
+                <object>Opportunity</object>
+                <object>Case</object>
+                <object>Campaign</object>
+                <object>Product2</object>
+                <object>Order</object>
+                <object>Contract</object>
+                <object>Asset</object>
+            </objects>
+            <property name="cardTitle" type="String" default="Related Records" label="Card Title" description="The title displayed on the component card"/>
+            <property name="objectApiName" type="String" default="Contact" label="Related Object API Name" description="API name of the related object (e.g., Contact, Opportunity)"/>
+            <property name="relationshipField" type="String" default="AccountId" label="Relationship Field" description="Field that relates the child object to the parent record"/>
+            <property name="fieldsToDisplay" type="String" default="Name,Email,Phone,Title" label="Fields to Display" description="Comma-separated list of field API names to display"/>
+            <property name="pageSize" type="Integer" default="10" label="Page Size" description="Number of records to display per page"/>
+            <property name="allowInlineEdit" type="Boolean" default="true" label="Allow Inline Edit" description="Enable inline editing of records"/>
+            <property name="allowBulkEdit" type="Boolean" default="true" label="Allow Bulk Edit" description="Enable bulk editing of multiple records"/>
+            <property name="allowDelete" type="Boolean" default="true" label="Allow Delete" description="Enable deletion of records"/>
+            <property name="showRowNumbers" type="Boolean" default="true" label="Show Row Numbers" description="Display row numbers in the table"/>
+            <property name="hideCheckboxColumn" type="Boolean" default="false" label="Hide Checkbox Column" description="Hide the selection checkbox column"/>
+            <property name="maxRowSelection" type="Integer" default="200" label="Max Row Selection" description="Maximum number of rows that can be selected"/>
+            <property name="sortedBy" type="String" default="Name" label="Default Sort Field" description="Field to sort by default"/>
+            <property name="sortedDirection" type="String" default="asc" label="Default Sort Direction" description="Default sort direction (asc or desc)"/>
+        </targetConfig>
+        
+        <targetConfig targets="lightning__AppPage,lightning__HomePage">
+            <property name="recordId" type="String" label="Record ID" description="ID of the parent record (required for App/Home pages)"/>
+            <property name="cardTitle" type="String" default="Related Records" label="Card Title" description="The title displayed on the component card"/>
+            <property name="objectApiName" type="String" default="Contact" label="Related Object API Name" description="API name of the related object"/>
+            <property name="relationshipField" type="String" default="AccountId" label="Relationship Field" description="Field that relates the child object to the parent record"/>
+            <property name="fieldsToDisplay" type="String" default="Name,Email,Phone,Title" label="Fields to Display" description="Comma-separated list of field API names to display"/>
+            <property name="pageSize" type="Integer" default="10" label="Page Size" description="Number of records to display per page"/>
+            <property name="allowInlineEdit" type="Boolean" default="true" label="Allow Inline Edit" description="Enable inline editing of records"/>
+            <property name="allowBulkEdit" type="Boolean" default="true" label="Allow Bulk Edit" description="Enable bulk editing of multiple records"/>
+            <property name="allowDelete" type="Boolean" default="true" label="Allow Delete" description="Enable deletion of records"/>
+            <property name="showRowNumbers" type="Boolean" default="true" label="Show Row Numbers" description="Display row numbers in the table"/>
+            <property name="hideCheckboxColumn" type="Boolean" default="false" label="Hide Checkbox Column" description="Hide the selection checkbox column"/>
+            <property name="maxRowSelection" type="Integer" default="200" label="Max Row Selection" description="Maximum number of rows that can be selected"/>
+            <property name="sortedBy" type="String" default="Name" label="Default Sort Field" description="Field to sort by default"/>
+            <property name="sortedDirection" type="String" default="asc" label="Default Sort Direction" description="Default sort direction (asc or desc)"/>
+        </targetConfig>
+        
+        <targetConfig targets="lightningCommunity__Page,lightningCommunity__Default">
+            <property name="recordId" type="String" label="Record ID" description="ID of the parent record"/>
+            <property name="cardTitle" type="String" default="Related Records" label="Card Title" description="The title displayed on the component card"/>
+            <property name="objectApiName" type="String" default="Contact" label="Related Object API Name" description="API name of the related object"/>
+            <property name="relationshipField" type="String" default="AccountId" label="Relationship Field" description="Field that relates the child object to the parent record"/>
+            <property name="fieldsToDisplay" type="String" default="Name,Email,Phone,Title" label="Fields to Display" description="Comma-separated list of field API names to display"/>
+            <property name="pageSize" type="Integer" default="10" label="Page Size" description="Number of records to display per page"/>
+            <property name="allowInlineEdit" type="Boolean" default="true" label="Allow Inline Edit" description="Enable inline editing of records"/>
+            <property name="allowBulkEdit" type="Boolean" default="true" label="Allow Bulk Edit" description="Enable bulk editing of multiple records"/>
+            <property name="allowDelete" type="Boolean" default="false" label="Allow Delete" description="Enable deletion of records (disabled by default in communities)"/>
+            <property name="showRowNumbers" type="Boolean" default="true" label="Show Row Numbers" description="Display row numbers in the table"/>
+            <property name="hideCheckboxColumn" type="Boolean" default="false" label="Hide Checkbox Column" description="Hide the selection checkbox column"/>
+            <property name="maxRowSelection" type="Integer" default="200" label="Max Row Selection" description="Maximum number of rows that can be selected"/>
+            <property name="sortedBy" type="String" default="Name" label="Default Sort Field" description="Field to sort by default"/>
+            <property name="sortedDirection" type="String" default="asc" label="Default Sort Direction" description="Default sort direction (asc or desc)"/>
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>
