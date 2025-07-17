@@ -1,0 +1,292 @@
+<template>
+    <lightning-card title={cardTitle} icon-name="standard:related_list">
+        <!-- Configuration Panel -->
+        <div slot="actions">
+            <lightning-button-group>
+                <lightning-button 
+                    label="Configure" 
+                    onclick={handleConfigure}
+                    icon-name="utility:settings"
+                    variant="neutral">
+                </lightning-button>
+                <lightning-button 
+                    label="Bulk Edit" 
+                    onclick={handleBulkEdit}
+                    icon-name="utility:edit"
+                    variant="neutral"
+                    disabled={isDisabled}>
+                </lightning-button>
+                <lightning-button 
+                    label="Export" 
+                    onclick={handleExport}
+                    icon-name="utility:download"
+                    variant="neutral">
+                </lightning-button>
+            </lightning-button-group>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-is-relative slds-p-around_large">
+                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="slds-p-around_medium">
+                <lightning-formatted-text value={error} class="slds-text-color_error"></lightning-formatted-text>
+            </div>
+        </template>
+
+        <!-- Data Table -->
+        <template if:false={isLoading}>
+            <div class="slds-p-around_medium">
+                <!-- Action Bar -->
+                <div class="slds-grid slds-grid_align-spread slds-m-bottom_small">
+                    <div class="slds-col">
+                        <lightning-input
+                            type="search"
+                            label="Search"
+                            placeholder="Search records..."
+                            value={searchTerm}
+                            onchange={handleSearch}
+                            variant="label-hidden">
+                        </lightning-input>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning-combobox
+                            label="Records per page"
+                            value={pageSize}
+                            placeholder="Select page size"
+                            options={pageSizeOptions}
+                            onchange={handlePageSizeChange}
+                            variant="label-hidden">
+                        </lightning-combobox>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions Bar -->
+                <template if:true={selectedRows.length}>
+                    <div class="bulk-actions-bar slds-box slds-theme_shade slds-m-bottom_small">
+                        <div class="slds-grid slds-grid_align-spread">
+                            <div class="slds-col">
+                                <span class="slds-text-body_small">
+                                    {selectedRows.length} record(s) selected
+                                </span>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-button-group>
+                                    <lightning-button 
+                                        label="Delete Selected" 
+                                        onclick={handleBulkDelete}
+                                        icon-name="utility:delete"
+                                        variant="destructive-text">
+                                    </lightning-button>
+                                    <lightning-button 
+                                        label="Update Selected" 
+                                        onclick={handleBulkUpdate}
+                                        icon-name="utility:edit"
+                                        variant="brand-outline">
+                                    </lightning-button>
+                                </lightning-button-group>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Data Table with Inline Editing -->
+                <lightning-datatable
+                    key-field="Id"
+                    data={tableData}
+                    columns={columns}
+                    selected-rows={selectedRows}
+                    onrowselection={handleRowSelection}
+                    oncellchange={handleCellChange}
+                    onsave={handleSave}
+                    oncancel={handleCancel}
+                    draft-values={draftValues}
+                    hide-checkbox-column={hideCheckboxColumn}
+                    show-row-number-column={showRowNumbers}
+                    row-number-offset={rowNumberOffset}
+                    resize-column-disabled={resizeColumnDisabled}
+                    sorted-by={sortedBy}
+                    sorted-direction={sortedDirection}
+                    onsort={handleSort}
+                    max-row-selection={maxRowSelection}>
+                </lightning-datatable>
+
+                <!-- Pagination -->
+                <template if:true={showPagination}>
+                    <div class="slds-grid slds-grid_align-spread slds-m-top_small">
+                        <div class="slds-col">
+                            <span class="slds-text-body_small">
+                                Showing {startRecord} to {endRecord} of {totalRecords} records
+                            </span>
+                        </div>
+                        <div class="slds-col">
+                            <lightning-button-group>
+                                <lightning-button 
+                                    label="Previous" 
+                                    onclick={handlePrevious}
+                                    disabled={isFirstPage}
+                                    icon-name="utility:chevronleft"
+                                    icon-position="left">
+                                </lightning-button>
+                                <lightning-button 
+                                    label="Next" 
+                                    onclick={handleNext}
+                                    disabled={isLastPage}
+                                    icon-name="utility:chevronright"
+                                    icon-position="right">
+                                </lightning-button>
+                            </lightning-button-group>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Configuration Modal -->
+        <template if:true={showConfigModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                title="Close" onclick={closeConfigModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">Configure Related List</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-tabset>
+                            <lightning-tab label="Columns">
+                                <div class="slds-grid slds-wrap">
+                                    <template for:each={availableFields} for:item="field">
+                                        <div key={field.name} class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                                            <lightning-input
+                                                type="checkbox"
+                                                label={field.label}
+                                                checked={field.visible}
+                                                data-field={field.name}
+                                                onchange={handleFieldVisibilityChange}>
+                                            </lightning-input>
+                                        </div>
+                                    </template>
+                                </div>
+                            </lightning-tab>
+                            <lightning-tab label="Settings">
+                                <div class="slds-form slds-form_stacked">
+                                    <lightning-input
+                                        type="checkbox"
+                                        label="Show row numbers"
+                                        checked={showRowNumbers}
+                                        onchange={handleShowRowNumbersChange}>
+                                    </lightning-input>
+                                    <lightning-input
+                                        type="checkbox"
+                                        label="Hide checkbox column"
+                                        checked={hideCheckboxColumn}
+                                        onchange={handleHideCheckboxChange}>
+                                    </lightning-input>
+                                    <lightning-input
+                                        type="number"
+                                        label="Max row selection"
+                                        value={maxRowSelection}
+                                        onchange={handleMaxRowSelectionChange}>
+                                    </lightning-input>
+                                </div>
+                            </lightning-tab>
+                        </lightning-tabset>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button 
+                            label="Cancel" 
+                            onclick={closeConfigModal}
+                            variant="neutral">
+                        </lightning-button>
+                        <lightning-button 
+                            label="Save" 
+                            onclick={saveConfiguration}
+                            variant="brand">
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Bulk Edit Modal -->
+        <template if:true={showBulkEditModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" 
+                                title="Close" onclick={closeBulkEditModal}>
+                            <lightning-icon icon-name="utility:close" alternative-text="close" size="small"></lightning-icon>
+                        </button>
+                        <h2 class="slds-text-heading_medium slds-hyphenate">
+                            Bulk Edit ({selectedRows.length} records)
+                        </h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <div class="slds-form slds-form_stacked">
+                            <template for:each={editableFields} for:item="field">
+                                <div key={field.name} class="slds-form-element">
+                                    <template if:true={field.isText}>
+                                        <lightning-input
+                                            label={field.label}
+                                            value={field.value}
+                                            data-field={field.name}
+                                            onchange={handleBulkFieldChange}>
+                                        </lightning-input>
+                                    </template>
+                                    <template if:true={field.isPicklist}>
+                                        <lightning-combobox
+                                            label={field.label}
+                                            value={field.value}
+                                            options={field.options}
+                                            data-field={field.name}
+                                            onchange={handleBulkFieldChange}>
+                                        </lightning-combobox>
+                                    </template>
+                                    <template if:true={field.isCheckbox}>
+                                        <lightning-input
+                                            type="checkbox"
+                                            label={field.label}
+                                            checked={field.value}
+                                            data-field={field.name}
+                                            onchange={handleBulkFieldChange}>
+                                        </lightning-input>
+                                    </template>
+                                    <template if:true={field.isDate}>
+                                        <lightning-input
+                                            type="date"
+                                            label={field.label}
+                                            value={field.value}
+                                            data-field={field.name}
+                                            onchange={handleBulkFieldChange}>
+                                        </lightning-input>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button 
+                            label="Cancel" 
+                            onclick={closeBulkEditModal}
+                            variant="neutral">
+                        </lightning-button>
+                        <lightning-button 
+                            label="Update Records" 
+                            onclick={processBulkEdit}
+                            variant="brand">
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>
